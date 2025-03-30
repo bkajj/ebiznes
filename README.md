@@ -4,7 +4,7 @@
 
 :white_check_mark: 3.5 wymaganie 2
 
-:white_check_mark: 4.0 wymaganie 3 [Link do commita](https://github.com/kprzystalski/workshop_template/commit/hash)
+:white_check_mark: 4.0 wymaganie 3 [Link do dockerhuba](https://hub.docker.com/repository/docker/bkaj/zad1-ebiznes/general)
 
 :x: 4.5 wymaganie 4
 
