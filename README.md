@@ -19,7 +19,7 @@ Kod: (folder lub branch)
 
 :white_check_mark: 3.5 wymaganie 2
 
-:white_check_mark: 4.0 wymaganie 3 [Link do commita](https://github.com/kprzystalski/workshop_template/commit/hash)
+:white_check_mark: 4.0 wymaganie 3 [Link do commita](https://github.com/bkajj/ebiznes/commit/725cbb4c11c79559d2c46997aa97befb7235d493)
 
 :x: 4.5 wymaganie 4
 
