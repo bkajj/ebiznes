@@ -25,5 +25,14 @@ Kod: (folder lub branch)
 
 :x: 5.0 wymaganie 5
 
+**Zadanie 4** Tytuł
 
-Do kazdego zadania nalezy przygotowac demo za pomocą https://obsproject.com/, a film (skompresowany) nalezy umiescic w katalogu demos.
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2
+
+:white_check_mark: 4.0 wymaganie 3 [Link do commita](https://github.com/bkajj/ebiznes/commit/6793378a4fbcf50a55b6a66c17591b40bcbd766a)
+
+:white_check_mark: 4.5 wymaganie 4
+
+:x: 5.0 wymaganie 5
