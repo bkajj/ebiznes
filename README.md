@@ -11,8 +11,6 @@
 :x: 5.0 wymaganie 5
 
 
-Kod: (folder lub branch)
-
 **Zadanie 2** Play/Scala 3
 
 :white_check_mark: 3.0 wymaganie 1
@@ -24,6 +22,7 @@ Kod: (folder lub branch)
 :x: 4.5 wymaganie 4
 
 :x: 5.0 wymaganie 5
+
 
 **Zadanie 4** Go
 
