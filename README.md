@@ -32,7 +32,7 @@ Kod: [zadanie 2](https://github.com/bkajj/ebiznes/tree/master/zadanie2/ebiznes2)
 
 :white_check_mark: 4.0 wymaganie 3
 
-:white_check_mark: 4.5 wymaganie 4  [Link do commita]([725cbb4c11c79559d2c46997aa97befb7235d493](https://github.com/bkajj/ebiznes/commit/1bda0cfb55c38232ca24858d662e08fa5db4f6d8))
+:white_check_mark: 4.5 wymaganie 4  [Link do commita](https://github.com/bkajj/ebiznes/commit/1bda0cfb55c38232ca24858d662e08fa5db4f6d8)
 
 :x: 5.0 wymaganie 5
 
