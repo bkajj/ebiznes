@@ -1,0 +1,3 @@
+[submodule "pai-project"]
+    path = zadanie6/pai-project
+    url = https://github.com/bkajj/pai-project
