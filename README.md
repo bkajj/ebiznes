@@ -51,3 +51,17 @@ Kod: [zadanie 3](https://github.com/bkajj/ebiznes/tree/master/zadanie3)
 :x: 5.0 wymaganie 5
 
 Kod: [zadanie 4](https://github.com/bkajj/ebiznes/tree/master/zadanie4)
+
+**Zadanie 4** Frontend react
+
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2
+
+:white_check_mark: 4.0 wymaganie 3 [Link do commita](https://github.com/bkajj/ebiznes/commit/14661915afc8e426c20b8ba578e55cff0712fe69)
+
+:x: 4.5 wymaganie 4 
+
+:x: 5.0 wymaganie 5
+
+Kod: [zadanie 5](https://github.com/bkajj/ebiznes/tree/master/zadanie5)
