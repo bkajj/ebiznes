@@ -1,3 +1,4 @@
+import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -37,18 +38,26 @@ val products = listOf(
     Product(3, "Wino Różowe", 44.99)
 )
 
+const val ContentType = "Content-Type"
+const val AllowOrigin = "Access-Control-Allow-Origin"
+
+fun handleResponseHeaders(response: String, exchange: HttpExchange)
+{
+    exchange.responseHeaders.add(ContentType, "application/json")
+    exchange.responseHeaders.add(AllowOrigin, "*")
+    exchange.sendResponseHeaders(200, response.toByteArray().size.toLong())
+    exchange.responseBody.use {
+        it.write(response.toByteArray())
+    }
+}
+
 fun main() {
     val server = HttpServer.create(InetSocketAddress(8080), 0)
 
     server.createContext("/products") { exchange ->
         if (exchange.requestMethod == "GET") {
             val response = Json.encodeToString(products)
-            exchange.responseHeaders.add("Content-Type", "application/json")
-            exchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
-            exchange.sendResponseHeaders(200, response.toByteArray().size.toLong())
-            exchange.responseBody.use {
-                it.write(response.toByteArray())
-            }
+            handleResponseHeaders(response, exchange)
         } else {
             exchange.sendResponseHeaders(405, -1)
         }
@@ -57,9 +66,9 @@ fun main() {
     server.createContext("/payment") { exchange ->
         when (exchange.requestMethod) {
             "OPTIONS" -> {
-                exchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
+                exchange.responseHeaders.add(AllowOrigin, "*")
                 exchange.responseHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-                exchange.responseHeaders.add("Access-Control-Allow-Headers", "Content-Type")
+                exchange.responseHeaders.add("Access-Control-Allow-Headers", ContentType)
                 exchange.sendResponseHeaders(204, -1) // No Content
             }
 
@@ -74,12 +83,7 @@ fun main() {
                     println("Łączna kwota: ${paymentRequest.total}")
 
                     val response = Json.encodeToString(mapOf("status" to "sukces"))
-                    exchange.responseHeaders.add("Content-Type", "application/json")
-                    exchange.responseHeaders.add("Access-Control-Allow-Origin", "*")
-                    exchange.sendResponseHeaders(200, response.toByteArray().size.toLong())
-                    exchange.responseBody.use {
-                        it.write(response.toByteArray())
-                    }
+                    handleResponseHeaders(response, exchange)
                 } catch (e: Exception) {
                     println("Błąd podczas deserializacji: ${e.message}")
                     exchange.sendResponseHeaders(400, -1)
