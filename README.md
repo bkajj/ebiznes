@@ -79,3 +79,17 @@ Kod: [zadanie 5](https://github.com/bkajj/ebiznes/tree/master/zadanie5)
 :x: 5.0 wymaganie 5
 
 Kod: [zadanie 6](https://github.com/bkajj/pai-project)
+
+**Zadanie 7** Sonar
+
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2 
+
+:white_check_mark: 4.0 wymaganie 3 
+
+:white_check_mark: 4.5 wymaganie 4 
+
+:white_check_mark: 5.0 wymaganie 5 [Link do commita](https://github.com/bkajj/ebiznes/commit/537a98ea41e9c49f2eaade4628b07a1663715178)
+
+Kod: [zadanie 7](https://github.com/bkajj/ebiznes/tree/master/zadanie7)
