@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useMemo } from "react";
+import PropTypes from "prop-types";
 
 const CartContext = createContext();
 
@@ -12,10 +13,15 @@ export const CartProvider = ({ children }) => {
   };
 
   const clearCart = () => setCart([]);
+  const cartValue = useMemo(() => ({ cart, addToCart, clearCart }), [cart]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, clearCart }}>
+    <CartContext.Provider value={cartValue}>
       {children}
     </CartContext.Provider>
   );
+};
+
+CartProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

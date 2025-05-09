@@ -26,3 +26,7 @@ export default function Products({ addToCart }) {
     </div>
   );
 }
+
+Products.propTypes = {
+  addToCart: PropTypes.func.isRequired,
+};
