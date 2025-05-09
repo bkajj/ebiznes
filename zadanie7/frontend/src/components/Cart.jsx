@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/Cart.css';
 import { useNavigate } from 'react-router-dom'; 
+import PropTypes from "prop-types";
 
 const Cart = ({ cart, clearCart }) => {
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ const Cart = ({ cart, clearCart }) => {
       ) : (
         <div>
           <ul>
-            {cart.map((item, index) => (
-              <li key={index}>
+            {cart.map((item) => (
+              <li key={item.product.id}>
                 <div className="product-info">
                   <span className="product-name">{item.product.name}</span>
                   <span className="product-quantity">Ilość: {item.quantity}</span>
@@ -38,6 +39,19 @@ const Cart = ({ cart, clearCart }) => {
       )}
     </div>
   );
+};
+
+Cart.propTypes = {
+  cart: PropTypes.arrayOf(
+    PropTypes.shape({
+      product: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+      }).isRequired,
+      quantity: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  clearCart: PropTypes.func,
 };
 
 export default Cart;
