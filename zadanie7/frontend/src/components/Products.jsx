@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Products.css";
+import PropTypes from "prop-types";
 
 export default function Products({ addToCart }) {
   const [products, setProducts] = useState([]);
