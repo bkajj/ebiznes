@@ -1,14 +1,15 @@
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.net.InetSocketAddress
 
 @Serializable
 data class Product(
     val id: Int,
     val name: String,
-    val price: Double
+    val price: Double,
 )
 
 @Serializable
@@ -16,35 +17,38 @@ data class Customer(
     val firstName: String,
     val lastName: String,
     val email: String,
-    val phone: String
+    val phone: String,
 )
 
 @Serializable
 data class CartItem(
     val product: Product,
-    val quantity: Int
+    val quantity: Int,
 )
 
 @Serializable
 data class PaymentRequest(
     val customer: Customer,
     val cart: List<CartItem>,
-    val total: String
+    val total: String,
 )
 
-val products = listOf(
-    Product(1, "Wino Czerwone", 49.99),
-    Product(2, "Wino Białe", 39.99),
-    Product(3, "Wino Różowe", 44.99)
-)
+val products =
+    listOf(
+        Product(1, "Wino Czerwone", 49.99),
+        Product(2, "Wino Białe", 39.99),
+        Product(3, "Wino Różowe", 44.99),
+    )
 
-const val ContentType = "Content-Type"
-const val AllowOrigin = "Access-Control-Allow-Origin"
+const val CONTENT_TYPE = "Content-Type"
+const val ALLOW_ORIGIN = "Access-Control-Allow-Origin"
 
-fun handleResponseHeaders(response: String, exchange: HttpExchange)
-{
-    exchange.responseHeaders.add(ContentType, "application/json")
-    exchange.responseHeaders.add(AllowOrigin, "*")
+fun handleResponseHeaders(
+    response: String,
+    exchange: HttpExchange,
+) {
+    exchange.responseHeaders.add(CONTENT_TYPE, "application/json")
+    exchange.responseHeaders.add(ALLOW_ORIGIN, "*")
     exchange.sendResponseHeaders(200, response.toByteArray().size.toLong())
     exchange.responseBody.use {
         it.write(response.toByteArray())
@@ -66,9 +70,9 @@ fun main() {
     server.createContext("/payment") { exchange ->
         when (exchange.requestMethod) {
             "OPTIONS" -> {
-                exchange.responseHeaders.add(AllowOrigin, "*")
+                exchange.responseHeaders.add(ALLOW_ORIGIN, "*")
                 exchange.responseHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-                exchange.responseHeaders.add("Access-Control-Allow-Headers", ContentType)
+                exchange.responseHeaders.add("Access-Control-Allow-Headers", CONTENT_TYPE)
                 exchange.sendResponseHeaders(204, -1) // No Content
             }
 
