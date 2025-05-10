@@ -8,19 +8,32 @@
 
 .navbar {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px 20px;
   background-color: #333;
   color: white;
 }
 
-.navbar a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+.nav-left,
+.nav-right {
+  display: flex;
+  gap: 20px;
 }
 
-.navbar a:hover {
+.navbar a,
+.nav-button {
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.navbar a:hover,
+.nav-button:hover {
   text-decoration: underline;
 }
 

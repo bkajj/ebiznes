@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Products from './components/Products';
 import Cart from './components/Cart';
 import Payment from './components/Payment';
+import Login from './components/Login';
+import Register from './components/Register';
 import './App.css';
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const addToCart = (product) => {
     const productIndex = cart.findIndex(item => item.product.id === product.id);
@@ -24,17 +27,55 @@ function App() {
     setCart([]);
   };
 
-  return (
+  const handleLogin = (token) => {
+    setToken(token);
+    localStorage.setItem('token', token); 
+  };
+
+ return (
     <Router>
       <div className="app">
         <nav className="navbar">
-          <Link to="/">Produkty</Link>
-          <Link to="/cart">Koszyk ({cart.length})</Link>
+          <div className="nav-left">
+            {!token ? (
+              <>
+                <Link to="/login">Logowanie</Link>
+                <Link to="/register">Rejestracja</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/">Produkty</Link>
+                <Link to="/cart">Koszyk ({cart.length})</Link>
+              </>
+            )}
+          </div>
+          {token && (
+            <div className="nav-right">
+              <button className="nav-button" onClick={() => {
+                setToken(null);
+                localStorage.removeItem('token');
+              }}>
+                Wyloguj
+              </button>
+            </div>
+          )}
         </nav>
+
         <Routes>
-          <Route path="/" element={<Products addToCart={addToCart} />} />
-          <Route path="/cart" element={<Cart cart={cart} clearCart={clearCart} />} />
-          <Route path="/payment" element={<Payment cart={cart} clearCart={clearCart} />} />
+          {!token ? (
+            <>
+              <Route path="/login" element={<Login onLoginSuccess={handleLogin} />} />
+              <Route path="/register" element={<Register onRegisterSuccess={handleLogin} />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<Products addToCart={addToCart} />} />
+              <Route path="/cart" element={<Cart cart={cart} clearCart={clearCart} />} />
+              <Route path="/payment" element={<Payment cart={cart} clearCart={clearCart} />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
+          )}
         </Routes>
       </div>
     </Router>

@@ -3,6 +3,24 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Payment.css";
 import PropTypes from "prop-types";
 
+function parseJwt(token) {
+  if (!token) return null;
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Błąd dekodowania tokena:", e);
+    return null;
+  }
+}
+
 export default function Payment({ clearCart }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,7 +29,7 @@ export default function Payment({ clearCart }) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    homeAddress: "",
     phone: ""
   });
 
@@ -21,14 +39,17 @@ export default function Payment({ clearCart }) {
     }
   }, [location.state, navigate]);
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0).toFixed(2);
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  ).toFixed(2);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const isFormValid = () => {
-    return formData.firstName && formData.lastName && formData.email && formData.phone;
+    return formData.firstName && formData.lastName && formData.homeAddress && formData.phone;
   };
 
   const handlePayment = () => {
@@ -37,16 +58,28 @@ export default function Payment({ clearCart }) {
       return;
     }
 
+    const token = localStorage.getItem("token");
+    const userPayload = parseJwt(token);
+
+    if (!userPayload) {
+      alert("Błąd autoryzacji. Zaloguj się ponownie.");
+      return;
+    }
+
     const orderData = {
-      customer: formData,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      homeAddress: formData.homeAddress,
+      phone: formData.phone,
       cart: cart,
-      total: totalPrice
+      total: parseFloat(totalPrice)
     };
 
     fetch("http://localhost:8080/payment", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(orderData)
     })
@@ -80,10 +113,10 @@ export default function Payment({ clearCart }) {
           required
         />
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
+          type="text"
+          name="homeAddress"
+          placeholder="Adres zamieszkania"
+          value={formData.homeAddress}
           onChange={handleChange}
           required
         />
