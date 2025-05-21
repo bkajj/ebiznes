@@ -15,6 +15,13 @@ function Login({ onLoginSuccess }) {
     if (params.get('registered') === '1') {
       setSuccessMessage('Rejestracja zakończona sukcesem.\nMożesz się teraz zalogować.');
     }
+    
+    const token = params.get('token');
+    if (token) {
+        localStorage.setItem('token', token);
+        onLoginSuccess?.(token);
+        navigate('/', { replace: true });
+    }
   }, [location]);
 
   const handleInputChange = (e) => {
@@ -81,6 +88,19 @@ function Login({ onLoginSuccess }) {
             ))}
         </p>
       )}
+      <div className="google-login">
+        <p>lub</p>
+        <button
+          type="button"
+          className="google-button"
+          onClick={() => {
+            window.location.href = 'http://localhost:8080/login-google?redirectUrl=http://localhost:3000/';
+          }}
+        >
+          <img src="/google.svg" alt="Google logo" className="google-icon" />
+          Zaloguj się przez Google
+        </button>
+      </div>
     </div>
   );
 }

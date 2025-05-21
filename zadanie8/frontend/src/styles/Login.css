@@ -79,3 +79,32 @@
   font-size: 0.95rem;
   text-align: center;
 }
+
+.google-login {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.google-button {
+  background-color: #fff;
+  color: #444;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.google-button:hover {
+  background-color: #f7f7f7d8;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
