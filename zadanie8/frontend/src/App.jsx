@@ -9,13 +9,13 @@ import './App.css';
 
 function App() {
   const [cart, setCart] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(sessionStorage.getItem('token'));
 
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = sessionStorage.getItem('token');
     if (storedToken && !token) {
       setToken(storedToken);
     }
@@ -26,7 +26,7 @@ function App() {
     const urlToken = params.get('token');
 
     if (urlToken) {
-      localStorage.setItem('token', urlToken);
+      sessionStorage.setItem('token', urlToken);
       setToken(urlToken);
       navigate('/', { replace: true });
     }
@@ -47,7 +47,7 @@ function App() {
 
   const handleLogin = (token) => {
     setToken(token);
-    localStorage.setItem('token', token);
+    sessionStorage.setItem('token', token);
   };
 
   return (
@@ -70,7 +70,7 @@ function App() {
           <div className="nav-right">
             <button className="nav-button" onClick={() => {
               setToken(null);
-              localStorage.removeItem('token');
+              sessionStorage.removeItem('token');
             }}>
               Wyloguj
             </button>

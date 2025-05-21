@@ -10,7 +10,7 @@ const OAuthSuccess = () => {
     const token = params.get("token");
     
     if (token) {
-      localStorage.setItem("access_token", token);
+      sessionStorage.setItem("access_token", token);
       navigate("/dashboard");
     } else {
       navigate("/login");

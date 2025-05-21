@@ -15,10 +15,10 @@ function Login({ onLoginSuccess }) {
     if (params.get('registered') === '1') {
       setSuccessMessage('Rejestracja zakończona sukcesem.\nMożesz się teraz zalogować.');
     }
-    
+
     const token = params.get('token');
     if (token) {
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
         onLoginSuccess?.(token);
         navigate('/', { replace: true });
     }
@@ -46,7 +46,7 @@ function Login({ onLoginSuccess }) {
 
       const data = await response.json();
       console.log(data);
-      localStorage.setItem('token', data.token);
+      sessionStorage.setItem('token', data.token);
       onLoginSuccess(data.token);
 
       navigate('/', { replace: true }); 
@@ -99,6 +99,18 @@ function Login({ onLoginSuccess }) {
         >
           <img src="/google.svg" alt="Google logo" className="google-icon" />
           Zaloguj się przez Google
+        </button>
+      </div>
+      <div className="google-login">
+        <button
+          type="button"
+          className="google-button"
+          onClick={() => {
+            window.location.href = 'http://localhost:8080/login-github?redirectUrl=http://localhost:3000/';
+          }}
+        >
+          <img src="/github.svg" alt="Github logo" className="google-icon" />
+          Zaloguj się przez GitHub
         </button>
       </div>
     </div>

@@ -20,7 +20,7 @@ import kotlinx.serialization.Serializable
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.client.request.*
 import io.ktor.server.routing.header
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.*
 import models.User
 import models.UserInfo
 
@@ -101,6 +101,56 @@ fun Application.module() {
                 call.respondRedirect("/")
             }
         }
+        authenticate("auth-oauth-github") {
+            get("/login-github") {
+            }
+
+            get("/login-github/callback") {
+                val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
+                if (principal == null) {
+                    call.respondRedirect("/login?error=github_auth_failed")
+                    return@get
+                }
+
+                val accessToken = principal.accessToken
+
+                val userResponse = applicationHttpClient.get("https://api.github.com/user") {
+                    header(HttpHeaders.Authorization, "Bearer $accessToken")
+                    header(HttpHeaders.Accept, "application/json")
+                }
+                val userJson = userResponse.body<JsonElement>()
+
+                val login = userJson.jsonObject["login"]?.jsonPrimitive?.content ?: "unknown"
+                val id = userJson.jsonObject["id"]?.jsonPrimitive?.int ?: 0
+                val emailResponse = applicationHttpClient.get("https://api.github.com/user/emails") {
+                    header(HttpHeaders.Authorization, "Bearer $accessToken")
+                    header(HttpHeaders.Accept, "application/json")
+                }
+
+                val emailsJson = emailResponse.body<List<JsonElement>>()
+                val primaryEmail = emailsJson.firstOrNull {
+                    it.jsonObject["primary"]?.jsonPrimitive?.booleanOrNull == true
+                }?.jsonObject?.get("email")?.jsonPrimitive?.content ?: ""
+
+                val user = User(
+                    id = id.toString(),
+                    username = login,
+                    email = primaryEmail,
+                    password = ""
+                )
+                val jwtToken = generateToken(user)
+
+                val state = principal.state ?: ""
+
+                if (state.isNotEmpty() && redirects.containsKey(state)) {
+                    val redirectUrl = redirects[state] + "?token=$jwtToken"
+                    call.respondRedirect(redirectUrl)
+                } else {
+                    call.respondRedirect("http://localhost:3000/?token=$jwtToken")
+                }
+            }
+        }
+
         authenticate("auth-jwt") {
             get("/protected") {
                 call.respondText("Dostęp do chronionej trasy przyznany!")
@@ -156,5 +206,24 @@ fun Application.configureAuth() {
             }
             client = applicationHttpClient
         }
+        oauth("auth-oauth-github") {
+            val dotenv = dotenv {
+                ignoreIfMissing = false
+            }
+            urlProvider = { "http://localhost:8080/login-github/callback" }
+            providerLookup = {
+                OAuthServerSettings.OAuth2ServerSettings(
+                    name = "github",
+                    authorizeUrl = "https://github.com/login/oauth/authorize",
+                    accessTokenUrl = "https://github.com/login/oauth/access_token",
+                    requestMethod = HttpMethod.Post,
+                    clientId = dotenv["GITHUB_CLIENT_ID"],
+                    clientSecret = dotenv["GITHUB_CLIENT_SECRET"],
+                    defaultScopes = listOf("read:user", "user:email")
+                )
+            }
+            client = applicationHttpClient
+        }
+
     }
 }

@@ -27,6 +27,8 @@ fun generateToken(user: User): String {
         .withAudience(jwtAudience)
         .withClaim("userId", user.id)
         .withClaim("username", user.username)
+        .withClaim("email", user.email)
+        .withClaim("password", user.password)
         .withExpiresAt(Date(expirationTime))
         .sign(Algorithm.HMAC256(jwtSecret))
 }

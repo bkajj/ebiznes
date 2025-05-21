@@ -58,7 +58,7 @@ export default function Payment({ clearCart }) {
       return;
     }
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const userPayload = parseJwt(token);
 
     if (!userPayload) {
