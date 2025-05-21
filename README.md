@@ -93,3 +93,17 @@ Kod: [zadanie 6](https://github.com/bkajj/pai-project)
 :white_check_mark: 5.0 wymaganie 5 [Link do commita](https://github.com/bkajj/ebiznes/commit/537a98ea41e9c49f2eaade4628b07a1663715178)
 
 Kod: [zadanie 7](https://github.com/bkajj/ebiznes/tree/master/zadanie7)
+
+**Zadanie 8** OAuth2
+
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2 
+
+:white_check_mark: 4.0 wymaganie 3 
+
+:white_check_mark: 4.5 wymaganie 4 [Link do commita](https://github.com/bkajj/ebiznes/commit/3bca949787772d214d4f356a7af86347ab347880)
+
+:x: 5.0 wymaganie 5
+
+Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie8)
