@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Sklep</title>
+  <link rel="stylesheet" href="/static/style.css">
+  {% load static %}
+  <script src="{% static 'main.js' %}"></script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="/">Asystent</a></li>
+      <li><a href="/shop/">Sklep</a></li>
+    </ul>
+  </nav>
+
+  <div class="chat-container">
+    <h1>Witaj w naszym sklepie!</h1>
+    <input type="text" id="prompt" placeholder="Zadaj pytanie">
+    <button onclick="sendMessage()">Wyślij</button>
+    <div id="chat"></div>
+  </div>
+</body>
+</html>
