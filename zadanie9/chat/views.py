@@ -37,7 +37,7 @@ def chat_view(request):
         if prompt == "start":
             greeting = random.choice(greetings)
             return JsonResponse({"response": greeting})
-        elif prompt in ["koniec", "dziekuje"]:
+        elif any(word in prompt.lower() for word in ["koniec", "dzięki", "do widzenia", "dziękuję", "dziekuje", "dzieki"]):
             farewell = random.choice(farewells)
             return JsonResponse({"response": farewell})
 
@@ -46,21 +46,35 @@ def chat_view(request):
         return JsonResponse({"response": data["response"]})
 
 def ask_llama(prompt):
-    promptCoxtext = (
-        "Jesteś pomocnym asystentem na stronie sklepu z ubraniami. "
-        "Sklep sprzedaje: t-shirty, bluzy, spodnie, czapki z daszkiem. "
-        "Dostepne sa 3 t-shirty: Volcom po 120zl, Santacruz po 89zł, Element po 99zł."
-        "Wszystkie w rozmiarach S M L XL"
-        "Jest tez bluza nikke we wszystkich rozmiarach po 250zl, jeansy z krojem relaxed w rozmiarze 32 po 150zl"
-        "Jest równiez dostepna czapka dickies w rozmiarze uniwersalnym po 79zl"
-        "Odpowiadaj profesjonalnie, ale przyjaźnie, w języku polskim, chyba ze uzytkownik zada pytanie w innym języku" 
-        )
+    prompt_context = (
+        "Jesteś uprzejmym i profesjonalnym asystentem AI na stronie sklepu z odzieżą. "
+        "Twoim zadaniem jest pomagać klientom w przeglądaniu oferty i odpowiadaniu na pytania dotyczące produktów.\n\n"
+        "Dostępne produkty:\n"
+        "- T-shirty: Volcom (120 zł), Santacruz (89 zł), Element (99 zł) – rozmiary S, M, L, XL\n"
+        "- Bluza: Nike – 250 zł – rozmiary S, M, L, XL\n"
+        "- Jeansy relaxed – 150 zł – rozmiar 32\n"
+        "- Czapka Dickies – 79 zł – rozmiar uniwersalny\n\n"
+        "Zasady:\n"
+        "- Odpowiadaj zwięźle i uprzejmie, w języku polskim.\n"
+        "- Jeśli klient zada pytanie w innym języku, dostosuj się.\n"
+        "- Nie zadawaj pytań w odpowiedzi, chyba że użytkownik wyraźnie poprosi o pomoc.\n"
+        "- Unikaj powtórzeń i zbyt długich wypowiedzi.\n"
+        "- Udzielaj odpowiedzi w 1–3 zdaniach.\n\n"
+        "Przykład:\n"
+        "Użytkownik: Jakie macie produkty?"
+        "Asystent: Oferujemy t-shirty Volcom, Santacruz, Element, bluzę Nike, jeansy relaxed oraz czapkę Dickies."
+        "Użytkownik: W jakiej cenie jest czapka?\n"
+        "Asystent: Czapka Dickies kosztuje 79 zł.\n\n"
+        "Użytkownik: A w jakich cenach są t-shirty?\n"
+        "Asystent: Volcom – 120 zł, Santacruz – 89 zł, Element – 99 zł.\n"
+       )
 
     return requests.post(
         "http://localhost:11434/api/generate",
         json={
-            "model": "llama3.2",
-            "prompt": promptCoxtext + "\n\n Użytkownik: " + prompt,
-            "stream": False
+            "model": "llama3:8b",
+            "prompt": prompt_context + f"\n\nUżytkownik: {prompt}",
+            "stream": False,
+            "temperature": 0.6
         }
     )
