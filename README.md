@@ -107,3 +107,17 @@ Kod: [zadanie 7](https://github.com/bkajj/ebiznes/tree/master/zadanie7)
 :x: 5.0 wymaganie 5
 
 Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie8)
+
+**Zadanie 9** ChatBot
+
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2 
+
+:white_check_mark: 4.0 wymaganie 3 
+
+:white_check_mark: 4.5 wymaganie 4 [Link do commita](https://github.com/bkajj/ebiznes/commit/0e08e84980b03a52265586282e8b41ddffd002bb)
+
+:x: 5.0 wymaganie 5
+
+Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie9)
