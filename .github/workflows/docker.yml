@@ -21,9 +21,20 @@ jobs:
 
       - name: Set production env
         run: |
-            cp ./zadanie8_10/frontend/.env.production ./zadanie8_10/frontend/.env
-            cp ./zadanie8_10/backend/.env.production ./zadanie8_10/backend/.env
+            cat <<EOF > ./zadanie8_10/frontend/.env
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            EOF
 
+            cat <<EOF > ./zadanie8_10/backend/.env
+            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
+            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}
+            GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            EOF
+            
       - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
