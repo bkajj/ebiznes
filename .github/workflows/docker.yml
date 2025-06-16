@@ -22,13 +22,13 @@ jobs:
       - name: Set production env
         run: |
             cat <<EOF > ./zadanie8_10/frontend/.env
-            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
-            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
+            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
             EOF
 
             cat <<EOF > ./zadanie8_10/backend/.env
-            FRONTEND_URL=${{ secrets.FRONTEND_URL }}
-            BACKEND_URL=${{ secrets.BACKEND_URL }}
+            FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
+            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
             GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}
             GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
@@ -49,23 +49,44 @@ jobs:
           push: true
           tags: bkaj/frontend-ebiz:latest
 
-      - name: Copy docker-compose.yml to Azure VM
+      - name: Copy docker-compose.yml to frontend VM
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.AZURE_HOST }}
+          host: ${{ secrets.FRONTEND_HOST }}
           username: ${{ secrets.AZURE_USER }}
-          key: ${{ secrets.AZURE_SSH_KEY }}
+          key: ${{ secrets.FRONTEND_KEY }}
           source: "zadanie8_10/docker-compose.yml"
           target: "~/app"
 
-      - name: Deploy on Azure VM via SSH
+      - name: Copy docker-compose.yml to backend VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.BACKEND_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.BACKEND_KEY }}
+          source: "zadanie8_10/docker-compose.yml"
+          target: "~/app"
+
+      - name: Deploy frontend on frontend VM
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.AZURE_HOST }}
+          host: ${{ secrets.FRONTEND_HOST }}
           username: ${{ secrets.AZURE_USER }}
-          key: ${{ secrets.AZURE_SSH_KEY }}
+          key: ${{ secrets.FRONTEND_KEY }}
           script: |
             cd ~/app
             docker-compose pull
             docker-compose down
-            docker-compose up -d
+            docker-compose up -d frontend
+
+      - name: Deploy backend on backend VM
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.BACKEND_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.BACKEND_KEY }}
+          script: |
+            cd ~/app
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d backend
