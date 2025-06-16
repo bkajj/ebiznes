@@ -56,7 +56,7 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.FRONTEND_KEY }}
           source: "zadanie8_10/docker-compose.yml"
-          target: "~/app"
+          target: "~/app/docker-compose.yml"
 
       - name: Copy docker-compose.yml to backend VM
         uses: appleboy/scp-action@v0.1.7
@@ -65,7 +65,7 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.BACKEND_KEY }}
           source: "zadanie8_10/docker-compose.yml"
-          target: "~/app"
+          target: "~/app/docker-compose.yml"
 
       - name: Deploy frontend on frontend VM
         uses: appleboy/ssh-action@v1.0.0
