@@ -19,6 +19,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set production env
+        run: |
+            cp zadanie8_10/frontend/.env.production zadanie8_10/frontend/.env
+            cp zadanie8_10/backend/.env.production zadanie8_10/backend/.env
+
       - name: Build and push backend
         uses: docker/build-push-action@v5
         with:
@@ -32,3 +37,24 @@ jobs:
           context: ./zadanie8_10/frontend
           push: true
           tags: bkaj/frontend-ebiz:latest
+
+      - name: Copy docker-compose.yml to Azure VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AZURE_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          source: "zadanie8_10/docker-compose.yml"
+          target: "~/app"
+
+      - name: Deploy on Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.AZURE_HOST }}
+          username: ${{ secrets.AZURE_USER }}
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          script: |
+            cd ~/app
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
