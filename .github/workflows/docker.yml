@@ -50,22 +50,10 @@ jobs:
           tags: bkaj/frontend-ebiz:latest
 
       - name: Copy docker-compose.yml to frontend VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.FRONTEND_HOST }}
-          username: ${{ secrets.AZURE_USER }}
-          key: ${{ secrets.FRONTEND_KEY }}
-          source: "zadanie8_10/docker-compose.yml"
-          target: "~/app/docker-compose.yml"
+        run: scp -i ${{ secrets.FRONTEND_KEY }} zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
 
       - name: Copy docker-compose.yml to backend VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.BACKEND_HOST }}
-          username: ${{ secrets.AZURE_USER }}
-          key: ${{ secrets.BACKEND_KEY }}
-          source: "zadanie8_10/docker-compose.yml"
-          target: "~/app/docker-compose.yml"
+        run: scp -i ${{ secrets.BACKEND_KEY }} zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
 
       - name: Deploy frontend on frontend VM
         uses: appleboy/ssh-action@v1.0.0
