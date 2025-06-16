@@ -34,6 +34,15 @@ jobs:
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             EOF
+
+      - name: Copy docker-compose.yml to frontend VM
+        run: |
+          rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
+
+      - name: Copy docker-compose.yml to backend VM
+        run: |
+          rsync -avz -e "ssh -i ${{ secrets.BACKEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
+
             
       - name: Build and push backend
         uses: docker/build-push-action@v5
@@ -48,12 +57,6 @@ jobs:
           context: ./zadanie8_10/frontend
           push: true
           tags: bkaj/frontend-ebiz:latest
-
-      - name: Copy docker-compose.yml to frontend VM
-        run: scp -i ${{ secrets.FRONTEND_KEY }} zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
-
-      - name: Copy docker-compose.yml to backend VM
-        run: scp -i ${{ secrets.BACKEND_KEY }} zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
 
       - name: Deploy frontend on frontend VM
         uses: appleboy/ssh-action@v1.0.0
