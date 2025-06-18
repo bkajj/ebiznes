@@ -35,14 +35,24 @@ jobs:
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             EOF
 
+      - name: Save frontend private key
+        run: |
+          echo "${{ secrets.FRONTEND_KEY }}" > frontend_key.pem
+          chmod 600 frontend_key.pem
+
       - name: Copy .env to frontend VM
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" ./zadanie8_10/frontend/.env ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/.env
+          rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/frontend/.env ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/.env
+
+      - name: Save backend private key
+        run: |
+          echo "${{ secrets.BACKEND_KEY }}" > backend_key.pem
+          chmod 600 backend_key.pem
 
       - name: Copy .env to backend VM
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.BACKEND_KEY }} -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
-
+          rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
+          
       - name: Copy docker-compose.yml to frontend VM
         run: |
           rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
