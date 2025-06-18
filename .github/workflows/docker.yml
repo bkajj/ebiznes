@@ -23,12 +23,12 @@ jobs:
         run: |
             cat <<EOF > ./zadanie8_10/frontend/.env
             FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
-            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
+            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8080
             EOF
 
             cat <<EOF > ./zadanie8_10/backend/.env
             FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
-            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
+            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8080
             GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}
             GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
@@ -37,8 +37,6 @@ jobs:
 
       - name: Setup frontend VM
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
           echo "${{ secrets.FRONTEND_KEY }}" > frontend_key.pem
           chmod 600 frontend_key.pem
           rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/frontend/.env ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/.env
@@ -74,6 +72,8 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.FRONTEND_KEY }}
           script: |
+            sudo apt-get update
+            sudo apt-get install -y docker-compose
             cd ~/app
             docker-compose pull
             docker-compose down
@@ -86,8 +86,12 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.BACKEND_KEY }}
           script: |
+            sudo apt-get update
+            sudo apt-get install -y docker-compose
             cd ~/app
             docker-compose pull
             docker-compose down
             docker-compose up -d backend
-# 1
+
+      - name: Clean up SSH keys
+        run: rm -f frontend_key.pem backend_key.pem
