@@ -52,14 +52,14 @@ jobs:
       - name: Copy .env to backend VM
         run: |
           rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
-          
+
       - name: Copy docker-compose.yml to frontend VM
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
+          rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
 
       - name: Copy docker-compose.yml to backend VM
         run: |
-          rsync -avz -e "ssh -i ${{ secrets.BACKEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
+          rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
 
             
       - name: Build and push backend
