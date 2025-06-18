@@ -35,6 +35,14 @@ jobs:
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             EOF
 
+      - name: Copy .env to frontend VM
+        run: |
+          rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" ./zadanie8_10/frontend/.env ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/.env
+
+      - name: Copy .env to backend VM
+        run: |
+          rsync -avz -e "ssh -i ${{ secrets.BACKEND_KEY }} -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
+
       - name: Copy docker-compose.yml to frontend VM
         run: |
           rsync -avz -e "ssh -i ${{ secrets.FRONTEND_KEY }} -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
