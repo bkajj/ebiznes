@@ -23,12 +23,12 @@ jobs:
         run: |
             cat <<EOF > ./zadanie8_10/frontend/.env
             REACT_APP_FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
-            REACT_APP_BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8080
+            REACT_APP_BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
             EOF
 
             cat <<EOF > ./zadanie8_10/backend/.env
             FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
-            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8080
+            BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
             GIT_CLIENT_ID=${{ secrets.GIT_CLIENT_ID }}
             GIT_CLIENT_SECRET=${{ secrets.GIT_CLIENT_SECRET }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
