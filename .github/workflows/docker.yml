@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "${{ secrets.FRONTEND_KEY }}" > frontend_key.pem
           chmod 600 frontend_key.pem
-          ssh -i backend_key.pem -o StrictHostKeyChecking=no ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }} "mkdir -p ~/app"
+          ssh -i frontendkey.pem -o StrictHostKeyChecking=no ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }} "mkdir -p ~/app"
           rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/frontend/docker-compose.frontend.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
 
       - name: Setup backend VM
