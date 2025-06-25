@@ -44,6 +44,7 @@ jobs:
           sudo apt-get update
           echo "${{ secrets.BACKEND_KEY }}" > backend_key.pem
           chmod 600 backend_key.pem
+          ssh -i backend_key.pem -o StrictHostKeyChecking=no ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }} "mkdir -p ~/app"
           rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
           rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/backend/docker-compose.backend.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
             
