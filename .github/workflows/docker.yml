@@ -24,11 +24,6 @@ jobs:
 
       - name: Set production env
         run: |
-            cat <<EOF > ./zadanie8_10/frontend/.env
-            REACT_APP_FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
-            REACT_APP_BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
-            EOF
-
             cat <<EOF > ./zadanie8_10/backend/.env
             FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
             BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
@@ -42,8 +37,7 @@ jobs:
         run: |
           echo "${{ secrets.FRONTEND_KEY }}" > frontend_key.pem
           chmod 600 frontend_key.pem
-          rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/frontend/.env ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/.env
-          rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
+          rsync -avz -e "ssh -i frontend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/frontend/docker-compose.frontend.yml ${{ secrets.AZURE_USER }}@${{ secrets.FRONTEND_HOST }}:~/app/docker-compose.yml
 
       - name: Setup backend VM
         run: |
@@ -51,7 +45,7 @@ jobs:
           echo "${{ secrets.BACKEND_KEY }}" > backend_key.pem
           chmod 600 backend_key.pem
           rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" ./zadanie8_10/backend/.env ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/.env
-          rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/docker-compose.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
+          rsync -avz -e "ssh -i backend_key.pem -o StrictHostKeyChecking=no" zadanie8_10/backend/docker-compose.backend.yml ${{ secrets.AZURE_USER }}@${{ secrets.BACKEND_HOST }}:~/app/docker-compose.yml
             
       - name: Build and push backend
         uses: docker/build-push-action@v5
@@ -70,6 +64,9 @@ jobs:
           tags: bkaj/frontend-ebiz:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            REACT_APP_BACKEND_URL=http://${{ secrets.BACKEND_HOST }}:8000
+            REACT_APP_FRONTEND_URL=http://${{ secrets.FRONTEND_HOST }}:3000
 
       - name: Deploy frontend on frontend VM
         uses: appleboy/ssh-action@v1.0.0
