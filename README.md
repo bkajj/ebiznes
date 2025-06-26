@@ -121,3 +121,17 @@ Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie8)
 :x: 5.0 wymaganie 5
 
 Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie9)
+
+**Zadanie 10** CI/CD
+
+:white_check_mark: 3.0 wymaganie 1
+
+:white_check_mark: 3.5 wymaganie 2 [Link do commita](https://github.com/bkajj/ebiznes/commit/bafb020051115aa96b82ac8629534d9a5dfd61a8)
+
+:x: 4.0 wymaganie 3 
+
+:x: 4.5 wymaganie 4 
+
+:x: 5.0 wymaganie 5
+
+Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie10)
