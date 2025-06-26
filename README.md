@@ -120,7 +120,7 @@ Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie8)
 
 :x: 5.0 wymaganie 5
 
-Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie9)
+Kod: [zadanie 9](https://github.com/bkajj/ebiznes/tree/master/zadanie9)
 
 **Zadanie 10** CI/CD
 
@@ -134,4 +134,4 @@ Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie9)
 
 :x: 5.0 wymaganie 5
 
-Kod: [zadanie 8](https://github.com/bkajj/ebiznes/tree/master/zadanie10)
+Kod: [zadanie 10](https://github.com/bkajj/ebiznes/tree/master/zadanie8_10)
